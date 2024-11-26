@@ -46,16 +46,20 @@ export class LoginComponent implements OnInit {
         this.loading = true;
         this.authenticationService.login(this.f.email.value, this.f.password.value)
             .pipe(first())
-            .subscribe({
-                next: () => {
-                    // get return url from route parameters or default to '/'
-                    const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-                    this.router.navigate([returnUrl]);
+            .subscribe(resp => {
+                    if (resp.status == "SUCCESS"){
+                        let data = resp.response
+                        console.log(data.token);
+                        sessionStorage.setItem('token', data.token)
+                        sessionStorage.setItem('user', JSON.stringify(data))
+                        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+                        this.router.navigate([returnUrl]);
+                    }
                 },
-                error: error => {
+                error => {
                     this.error = error;
                     this.loading = false;
                 }
-            });
+            );
     }
 }

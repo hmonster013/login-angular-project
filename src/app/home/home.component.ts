@@ -13,6 +13,8 @@ export class HomeComponent {
 
     ngOnInit() {
         this.loading = true;
+        console.log(sessionStorage.getItem('token'));
+        console.log(sessionStorage.getItem('user'));
         this.userService.getAll().pipe(first()).subscribe(users => {
             this.loading = false;
             this.users = users;
